@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using MojProjekatPonovo.Data;
+using MojProjekatPonovo.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<BlogDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"))); 
-
+options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

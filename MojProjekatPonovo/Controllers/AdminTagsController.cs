@@ -4,15 +4,16 @@ using Microsoft.Identity.Client;
 using MojProjekatPonovo.Data;
 using MojProjekatPonovo.Models.Domain;
 using MojProjekatPonovo.Models.ViewModels;
+using MojProjekatPonovo.Repositories;
 
 namespace MojProjekatPonovo.Controllers
 {
     public class AdminTagsController : Controller
     {
-        private BlogDbContext _blogDbContext;
-        public AdminTagsController(BlogDbContext blogDbContext)
+        private ITagRepository tagRepository;
+        public AdminTagsController(ITagRepository tagRepository)
         {
-            _blogDbContext = blogDbContext;
+            this.tagRepository = tagRepository;
         }
 
         [HttpGet]
@@ -31,8 +32,7 @@ namespace MojProjekatPonovo.Controllers
                 DisplayName = addTagRequest.DisplayName,
             };
 
-            await _blogDbContext.Tags.AddAsync(tag);
-            await _blogDbContext.SaveChangesAsync();
+            await tagRepository.AddAsync(tag);
             return RedirectToAction("List");
         }
 
@@ -40,8 +40,7 @@ namespace MojProjekatPonovo.Controllers
         [ActionName("List")]
         public async Task<IActionResult> List()
         {
-            var tags = await _blogDbContext.Tags.ToListAsync();
-
+            var tags = await tagRepository.GetAllAsync();
             return View(tags);
         }
 
@@ -51,7 +50,7 @@ namespace MojProjekatPonovo.Controllers
             //1st method
             //var tag = _blogDbContext.Tags.Find(id);
 
-            var tag = await _blogDbContext.Tags.FirstOrDefaultAsync(x => x.Id == id);
+            var tag = await tagRepository.GetAsync(id);
             if (tag != null)
             {
                 var editTag = new EditTagRequest();
@@ -73,15 +72,11 @@ namespace MojProjekatPonovo.Controllers
                 Name = editTagRequest.Name,
                 DisplayName = editTagRequest.DisplayName,
             };
-            var existTag = await _blogDbContext.Tags.FindAsync(tag.Id);
-            if (existTag != null)
+            var updateTag = await tagRepository.UpdateAsync(tag);
+            if (updateTag != null)
             {
-                existTag.Name = tag.Name;
-                existTag.DisplayName = tag.DisplayName;
-                await _blogDbContext.SaveChangesAsync();
                 return RedirectToAction("List");
             }
-
 
             return RedirectToAction("Edit", new { id = editTagRequest.Id });
         }
@@ -89,12 +84,9 @@ namespace MojProjekatPonovo.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(EditTagRequest editTagRequest)
         {
-            var tag = await _blogDbContext.Tags.FindAsync(editTagRequest.Id);
+            var tag = await tagRepository.DeleteAsync(editTagRequest.Id);
             if (tag != null)
             {
-                _blogDbContext.Remove(tag);
-                await _blogDbContext.SaveChangesAsync();
-                //show succes
                 return RedirectToAction("List");
             }
             return RedirectToAction("List");
