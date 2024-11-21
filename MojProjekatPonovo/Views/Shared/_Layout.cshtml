@@ -27,8 +27,8 @@
                                 Admin
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-controller="AdminTags" asp-action="Add">Add Tag</a></li>
-                                
+                                <li><a class="dropdown-item" asp-controller="AdminTags" asp-action="Add" asp->Add Tag</a></li>
+                                <li><a class="dropdown-item" asp-controller="AdminTags" asp-action="List" asp->Show Tag</a></li>
                             </ul>
                         </li>
                        
@@ -39,7 +39,7 @@
     </header>
     <div>
         <main role="main" class="pb-3">
-            @RenderBody()
+             @RenderBody()
         </main>
     </div>
 

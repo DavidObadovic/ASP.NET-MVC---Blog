@@ -20,18 +20,27 @@ namespace MojProjekatPonovo.Controllers
         }
 
         [HttpPost]
-        [ActionName("Add")]
         public IActionResult Add(AddTagRequest addTagRequest)
         {
             var tag = new Tag
             {
+
                 Name= addTagRequest.Name,
                 DisplayName= addTagRequest.DisplayName,
             };
 
             _blogDbContext.Tags.Add(tag);
             _blogDbContext.SaveChanges();
-            return View("Add");
+            return RedirectToAction("List"); 
+        }
+
+        [HttpGet]
+        [ActionName("List")]
+        public IActionResult List()
+        {
+            var tags = _blogDbContext.Tags.ToList();
+
+            return View(tags);
         }
     }
 }

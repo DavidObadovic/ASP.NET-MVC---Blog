@@ -7,6 +7,7 @@ namespace MojProjekatPonovo.Data
     {
         public BlogDbContext(DbContextOptions options) : base(options)
         {
+
         }
 
         public DbSet<BlogPost> BlogPosts { get; set; }
