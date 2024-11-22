@@ -27,7 +27,6 @@ namespace MojProjekatPonovo.Controllers
         {
             var tag = new Tag
             {
-
                 Name = addTagRequest.Name,
                 DisplayName = addTagRequest.DisplayName,
             };

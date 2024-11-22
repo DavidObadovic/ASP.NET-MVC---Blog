@@ -14,7 +14,7 @@ namespace MojProjekatPonovo.Repositories
         }
         public async Task<Tag> AddAsync(Tag tag)
         {
-            await db.AddAsync(tag);
+            await db.Tags.AddAsync(tag);
             await db.SaveChangesAsync();
             return tag;
         }
