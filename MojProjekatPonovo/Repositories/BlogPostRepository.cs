@@ -18,9 +18,16 @@ namespace MojProjekatPonovo.Repositories
             return post;
         }
 
-        public Task<BlogPost?> DeleteAsync(Guid id)
+        public async Task<BlogPost?> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var exist = await dbContext.BlogPosts.FindAsync(id);
+            if (exist != null)
+            {
+                dbContext.BlogPosts.Remove(exist);
+                await dbContext.SaveChangesAsync();
+                return exist;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync()
@@ -33,9 +40,27 @@ namespace MojProjekatPonovo.Repositories
             return await dbContext.BlogPosts.Include(x => x.Tags).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<BlogPost?> UpdateAsync(BlogPost post)
+        public async Task<BlogPost?> UpdateAsync(BlogPost post)
         {
-            throw new NotImplementedException();
+            var exist = await dbContext.BlogPosts.Include(x => x.Tags).FirstOrDefaultAsync(x => x.Id == post.Id);
+            if (exist != null)
+            {
+                exist.Id = post.Id;
+                exist.Heading = post.Heading;
+                exist.PageTitle = post.PageTitle;
+                exist.Contect = post.Contect;
+                exist.ShortDecription = post.ShortDecription;
+                exist.Author = post.Author;
+                exist.FeaturedImageUrl = post.FeaturedImageUrl;
+                exist.UrlHandle = post.UrlHandle;
+                exist.Visible = post.Visible;
+                exist.PublishedDate = post.PublishedDate;
+                exist.Tags = post.Tags;
+
+                await dbContext.SaveChangesAsync();
+                return exist;
+            }
+            return null;
         }
     }
 }

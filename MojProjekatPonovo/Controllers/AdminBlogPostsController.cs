@@ -43,6 +43,7 @@ namespace MojProjekatPonovo.Controllers
                 Author = blogPostRequest.Author,
                 Visible = blogPostRequest.Visible,
             };
+
             var selectedItem = new List<Tag>();
 
             foreach (var tag in blogPostRequest.SelectedTags)
@@ -60,6 +61,7 @@ namespace MojProjekatPonovo.Controllers
         }
 
         [HttpGet]
+        [ActionName("List")]
         public async Task<IActionResult> List()
         {
             var BlogPost = await blogPostRepository.GetAllAsync();
@@ -96,6 +98,62 @@ namespace MojProjekatPonovo.Controllers
                 return View(model);
             }
             return View(null);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditBlogPostRequest blogPost)
+        {
+            var BlogPostDomain = new BlogPost()
+            {
+                Id = blogPost.Id,
+                Heading = blogPost.Heading,
+                PageTitle = blogPost.PageTitle,
+                Contect = blogPost.Contect,
+                Author = blogPost.Author,
+                ShortDecription = blogPost.ShortDecription,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                PublishedDate = blogPost.PublishedDate,
+                UrlHandle = blogPost.UrlHandle,
+                Visible = blogPost.Visible,
+            };
+            var selectedTag = new List<Tag>();
+
+            foreach (var selectedtag in blogPost.SelectedTags)
+            {
+                if (Guid.TryParse(selectedtag, out var tag))
+                {
+                    var found = await tagRepository.GetAsync(tag);
+
+                    if (found != null)
+                        selectedTag.Add(found);
+
+                }
+            }
+
+            BlogPostDomain.Tags = selectedTag;
+
+            var obj = await blogPostRepository.UpdateAsync(BlogPostDomain);
+
+            if (obj != null)
+            {
+                return RedirectToAction("List");
+            }
+
+            return View(blogPost);
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(EditBlogPostRequest blogPost)
+        {
+            var exist = await blogPostRepository.DeleteAsync(blogPost.Id);
+
+            if (exist != null)
+                return RedirectToAction("List");
+
+
+            return RedirectToAction("List");
+
         }
     }
 }
