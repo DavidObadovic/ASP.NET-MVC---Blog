@@ -37,7 +37,7 @@ namespace MojProjekatPonovo.Repositories
             return await db.Tags.ToListAsync();
         }
 
-        public async Task<Tag> GetAsync(Guid id)
+        public async Task<Tag?> GetAsync(Guid id)
         {
             return await db.Tags.FirstOrDefaultAsync(x => x.Id == id);
         }
