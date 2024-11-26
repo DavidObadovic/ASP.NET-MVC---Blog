@@ -14,10 +14,11 @@ namespace MojProjekatPonovo.Controllers
         {
             this.imageRepository = imageRepository;
         }
+
         [HttpPost]
-        public async Task<IActionResult> UploadAsync(IFormFile formFile)
+        public async Task<IActionResult> UploadAsync(IFormFile file)
         {
-            var imageUrl = await imageRepository.uploadAsync(formFile);
+            var imageUrl = await imageRepository.uploadAsync(file);
             if (imageUrl == null)
             {
                 return Problem("Something went wrong", null, (int)HttpStatusCode.InternalServerError);
