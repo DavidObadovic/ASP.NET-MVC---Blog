@@ -15,6 +15,8 @@ namespace MojProjekatPonovo.Repositories
                 configuration.GetSection("Cloudinary")["ApiKey"],
                 configuration.GetSection("Cloudinary")["ApiSecret"]);
         }
+
+        
         public async Task<string> uploadAsync(IFormFile file)
         {
             var client = new Cloudinary(account);

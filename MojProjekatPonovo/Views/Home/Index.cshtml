@@ -1,9 +1,48 @@
-﻿@{
+﻿@model List<MojProjekatPonovo.Models.Domain.BlogPost>
+
+@{
     ViewData["Title"] = "Home Page";
 }
+ 
+<div class="container col-xxl-8 px-4 py-4">
+    <div class="row align-items-center g-5 py-5">
+        <div class="col-12 col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">
+                Moj prvi sajt
+            </h1>
+            <p>Nesto cu da pisem ovde, za sad nemam pojma sta i kako
+                ali neka pise ovako pa nek bude sta bude.
+            </p>
+        </div>
 
+        <div class="col-12 col-lg-6">
+            <img src="https://images.pexels.com/photos/4200831/pexels-photo-4200831.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+            alt="Slika" class="d-block mx-lg-auto img-fluid" width="300"/>
+        </div>
+    </div>
+</div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            @if(Model!=null && Model.Any())
+            {
+                foreach(var blogPost in Model)
+                {
+                    <div class="mb-5 bg-light box-shadow">
+                        <img src="@blogPost.FeaturedImageUrl" 
+                        class="mb-2 d-block img-fluid"/>
+
+                        <h2 class="mb-2">@blogPost.Heading</h2>
+
+                        <p class="mb-2">
+                            Author: @blogPost.Author
+                            <br />
+                            Published Date: @blogPost.PublishedDate.ToShortDateString()
+                        </p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
 </div>
