@@ -24,22 +24,37 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-6">
+        <div class="col-7">
             @if(Model!=null && Model.Any())
             {
                 foreach(var blogPost in Model)
                 {
-                    <div class="mb-5 bg-light box-shadow">
+                    <div class="mb-5 bg-light box-shadow p-5">
                         <img src="@blogPost.FeaturedImageUrl" 
                         class="mb-2 d-block img-fluid"/>
 
-                        <h2 class="mb-2">@blogPost.Heading</h2>
+                        <h2 class="mb-4">@blogPost.Heading</h2>
 
-                        <p class="mb-2">
+                        <p class="mb-4">
                             Author: @blogPost.Author
                             <br />
                             Published Date: @blogPost.PublishedDate.ToShortDateString()
                         </p>
+                        <p>
+                            @foreach (var tag in blogPost.Tags)
+                            {
+                                <span class="badge bg-secondary me-1">@tag.Name</span>
+                            }
+                        </p>
+                        <p class="mb-4">
+                            @blogPost.ShortDecription
+                        </p>
+                        <a class="btn btn-dark" 
+                        asp-controller="Blogs"
+                        asp-action="Index"
+                        asp-route-urlHandle="@blogPost.UrlHandle"
+                        >Read more</a>
+                        
                     </div>
                 }
             }

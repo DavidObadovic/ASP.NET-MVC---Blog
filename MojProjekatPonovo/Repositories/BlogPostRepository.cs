@@ -40,6 +40,11 @@ namespace MojProjekatPonovo.Repositories
             return await dbContext.BlogPosts.Include(x => x.Tags).FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<BlogPost?> GetAsync(string urlHandle)
+        {
+            return await dbContext.BlogPosts.Include(x => x.Tags).FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
+        }
+
         public async Task<BlogPost?> UpdateAsync(BlogPost post)
         {
             var exist = await dbContext.BlogPosts.Include(x => x.Tags).FirstOrDefaultAsync(x => x.Id == post.Id);
